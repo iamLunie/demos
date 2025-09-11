@@ -4,7 +4,6 @@ import threading
 import sys
 import argparse
 from smol_mind import SmolMind, load_functions
-from constants import MODEL_NAME
 
 # Thanks to @torymur for the bunny ascii art!
 bunny_ascii = r"""
@@ -24,19 +23,14 @@ def spinner(stop_event):
 def main():
     # Add command-line argument parsing
     parser = argparse.ArgumentParser(description="SmolMind CLI")
-    parser.add_argument('-d', '--debug', action='store_true', help='Enable debug mode')
-    parser.add_argument('-i', '--instruct', action='store_true', help='Enable instruct mode (disables continue mode)')
+    parser.add_argument("-s", "--size", choices=["1.7B", "135M"], default="1.7B")
     args = parser.parse_args()
 
     print("loading SmolMind...")
     functions = load_functions("./src/functions.json")
-    sm = SmolMind(functions, model_name=MODEL_NAME, debug=args.debug, instruct=args.instruct)
-    if args.debug:
-        print("Using model:", sm.model_name)
-        print("Debug mode:", "Enabled" if args.debug else "Disabled")
-        print("Instruct mode:", "Enabled" if args.instruct else "Disabled")
+    sm = SmolMind(functions, args.size)
     print(bunny_ascii)
-    print("Welcome to the Bunny B1! What do you need?")
+    print(f"Welcome to the Bunny B1 (powered by SmolLM2-{args.size})! What do you need?")
     while True:
         user_input = input("> ")
         if user_input.lower() in ["exit", "quit"]:
