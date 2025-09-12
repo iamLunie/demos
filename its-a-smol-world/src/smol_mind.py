@@ -8,23 +8,16 @@ import warnings
 from fn import build_regex_from_functions
 from prompt import generate_prompt
 
-models = {
-    "135M": "HuggingFaceTB/SmolLM2-135M-Instruct-Q8-mlx",
-    "1.7B": "HuggingFaceTB/SmolLM2-1.7B-Instruct-Q8-mlx",
-}
-
-def load_functions(path):
-    with open(path, "r") as f:
-        return json.load(f)['functions']
 
 class SmolMind:
-    def __init__(self, functions, model_size):
+    def __init__(self, functions):
         import mlx_lm
 
         self.functions = functions
         self.fn_regex = build_regex_from_functions(functions)
 
-        model_name = models[model_size]
+        # model_name = "HuggingFaceTB/SmolLM2-135M-Instruct-Q8-mlx"
+        model_name = "HuggingFaceTB/SmolLM2-1.7B-Instruct-Q8-mlx"
 
         # ---- INITIALIZE OUTLINES MODEL ---- #
         mlx_model = mlx_lm.load(model_name)
